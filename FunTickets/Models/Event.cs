@@ -11,11 +11,11 @@ namespace FunTickets.Models
 
         public string Description { get; set; } = string.Empty;
 
-        // Category relationship
+     
         public int CategoryId { get; set; }
         public Categorys? Category { get; set; }
 
-        // Event schedule
+        
         public DateTime EventDateTime { get; set; }
 
         public string Owner { get; set; } = string.Empty;
