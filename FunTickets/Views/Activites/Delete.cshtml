@@ -1,0 +1,23 @@
+﻿@model FunTickets.Models.Activite
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Activite</h4>
+    <hr />
+    <div class="mb-3">
+        <h4>@Model.ActiviteName</h4>
+        <p><strong>Date:</strong> @Model.ActivityDateTime.ToString("f")</p>
+        <p><strong>Location:</strong> @Model.Location</p>
+    </div>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ActiviteId" />
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

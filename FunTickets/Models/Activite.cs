@@ -2,10 +2,10 @@
 
 namespace FunTickets.Models
 {
-    public class Event
+    public class Activite
     {
-        public int EventId { get; set; }
-        public string EventName { get; set; } = string.Empty;
+        public int ActiviteId { get; set; }
+        public string ActiviteName { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
 
 
@@ -13,10 +13,11 @@ namespace FunTickets.Models
 
      
         public int CategoryId { get; set; }
-        public Categorys? Category { get; set; }
+        public Category? Category { get; set; }
 
-        
-        public DateTime EventDateTime { get; set; }
+
+        public DateTime ActivityDateTime { get; set; }
+
 
         public string Owner { get; set; } = string.Empty;
 

@@ -1,10 +1,10 @@
 ﻿namespace FunTickets.Models
 {
-    public class Categorys
+    public class Category
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
-        
-        public List<Tickets>? Tickets { get; set; }
+
+        public ICollection<Activite>? Events { get; set; }
     }
 }

@@ -1,7 +1,16 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using FunTickets.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<FunTicketsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("FunTicketsContext") ?? throw new InvalidOperationException("Connection string 'FunTicketsContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// 🔹 Connect DbContext to SQL Server using the connection string
+builder.Services.AddDbContext<FunTicketsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("FunTicketsContext")));
 
 var app = builder.Build();
 
