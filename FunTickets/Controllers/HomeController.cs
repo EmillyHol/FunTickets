@@ -15,7 +15,7 @@ namespace FunTickets.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Activites");
+            return View();
         }
 
         public IActionResult Privacy()

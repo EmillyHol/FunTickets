@@ -10,7 +10,7 @@ namespace FunTickets.Data
     public class FunTicketsContext : DbContext
     {
         internal object Activites;
-        public FunTicketsContext (DbContextOptions<FunTicketsContext> options)
+        public FunTicketsContext(DbContextOptions<FunTicketsContext> options)
             : base(options)
         {
         }

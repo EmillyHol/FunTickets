@@ -107,9 +107,10 @@ namespace FunTickets.Controllers
             {
                 try
                 {
-
+                    // Get the existing entity (tracked by EF)
                     var existing = await _context.Event.FindAsync(id);
-                    if (existing == null) return NotFound();
+                    if (existing == null)
+                        return NotFound();
 
                     // Update only editable fields
                     existing.ActiviteName = activite.ActiviteName;
@@ -119,8 +120,6 @@ namespace FunTickets.Controllers
                     existing.ActivityDateTime = activite.ActivityDateTime;
                     existing.Owner = activite.Owner;
 
-
-                    _context.Update(activite);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
