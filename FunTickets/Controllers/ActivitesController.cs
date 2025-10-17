@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FunTickets.Data;
 using FunTickets.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FunTickets.Controllers
 {
+    [Authorize]
     public class ActivitesController : Controller
     {
         private readonly FunTicketsContext _context;
@@ -22,7 +21,7 @@ namespace FunTickets.Controllers
         // GET: Activites
         public async Task<IActionResult> Index()
         {
-            var funTicketsContext = _context.Event.Include(a => a.Category);
+            var funTicketsContext = _context.Activites.Include(a => a.Category);
             return View(await funTicketsContext.ToListAsync());
 
 
@@ -36,7 +35,7 @@ namespace FunTickets.Controllers
                 return NotFound();
             }
 
-            var activite = await _context.Event
+            var activite = await _context.Activites
                 .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.ActiviteId == id);
             if (activite == null)
@@ -59,19 +58,41 @@ namespace FunTickets.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActiviteId,ActiviteName,Location,Description,CategoryId,EventDateTime,Owner")] Activite activite)
+        public async Task<IActionResult> Create([Bind("ActiviteId,ActiviteName,Location,Description,CategoryId,EventDateTime,Owner,FormFile")] Activite activite)
         {
             if (ModelState.IsValid)
             {
                 // Set CreatedAt automatically
                 activite.CreatedAt = DateTime.Now;
 
+                //handle file upload (opcional)
+                if (activite.FormFile != null)
+                {
+                    // Generate a unique file name with Guid
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(activite.FormFile.FileName);
+
+
+                    // Store the filename in the database
+                    activite.ImageFilename = fileName;
+
+                    // Define the path to save the file
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+
+                    // Save the file to the specified path
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await activite.FormFile.CopyToAsync(stream);
+                    }
+
+                }
                 _context.Add(activite);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index),"Home"); // Redirect to Home index after creation
+
             }
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryName", activite.CategoryId);
-            return View(activite);
+            return View(activite);  
         }
 
         // GET: Activites/Edit/5
@@ -82,7 +103,7 @@ namespace FunTickets.Controllers
                 return NotFound();
             }
 
-            var activite = await _context.Event.FindAsync(id);
+            var activite = await _context.Activites.FindAsync(id);
             if (activite == null)
             {
                 return NotFound();
@@ -108,7 +129,7 @@ namespace FunTickets.Controllers
                 try
                 {
                     // Get the existing entity (tracked by EF)
-                    var existing = await _context.Event.FindAsync(id);
+                    var existing = await _context.Activites.FindAsync(id);
                     if (existing == null)
                         return NotFound();
 
@@ -147,7 +168,7 @@ namespace FunTickets.Controllers
                 return NotFound();
             }
 
-            var activite = await _context.Event
+            var activite = await _context.Activites
                 .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.ActiviteId == id);
             if (activite == null)
@@ -163,10 +184,10 @@ namespace FunTickets.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var activite = await _context.Event.FindAsync(id);
+            var activite = await _context.Activites.FindAsync(id);
             if (activite != null)
             {
-                _context.Event.Remove(activite);
+                _context.Activites.Remove(activite);
             }
 
             await _context.SaveChangesAsync();
@@ -175,7 +196,7 @@ namespace FunTickets.Controllers
 
         private bool ActiviteExists(int id)
         {
-            return _context.Event.Any(e => e.ActiviteId == id);
+            return _context.Activites.Any(e => e.ActiviteId == id);
         }
     }
 }

@@ -1,21 +1,51 @@
-﻿@model List<FunTickets.Models.Activite>
+﻿
+
+@model IEnumerable<FunTickets.Models.Activite>
 
 @{
     ViewData["Title"] = "Home Page";
-
 }
 
+<!-- Banner Section -->
 <div class="banner d-flex align-items-center justify-content-center text-center">
-    <!-- White translucent container in front -->
-    <div class="banner-content bg-white bg-opacity-75 p-5 rounded shadow">
-        <h1 class="display-4 fw-bold mb-4 text-dark">Welcome to Wonderlandx</h1>
-
-        <!-- Flexbox button -->
-        <div class="d-flex justify-content-center fw-bold">
-            <a href="@Url.Action("Create", "Activites")" class="btn btn-primary px-5 py-2 rounded-3">
-                Create
+    <div class="bg-white bg-opacity-75 p-5 rounded shadow text-dark">
+        <h1 class="display-4 fw-bold mb-4">Welcome to Wonderlandx</h1>
+        <div class="d-flex justify-content-center">
+            <a href="@Url.Action("Create", "Activites")"class="btn btn-primary px-5 py-2 rounded-3 fw-bold">Create
             </a>
         </div>
     </div>
 </div>
 
+
+<!-- Events Section -->
+<div class="container my-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <!-- Event image or placeholder -->
+                    @if (!string.IsNullOrEmpty(item.ImageFilename))
+                    {
+                        <img src="~/images/@item.ImageFilename" class="card-img-top" alt="@item.ActiviteName"
+                             style="object-fit: cover; height: 200px;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/placeholder.png" class="card-img-top" alt="No image"
+                             style="object-fit: cover; height: 200px;" />
+                    }
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">@item.ActiviteName</h5>
+                        <p class="text-muted mb-1"><strong>Location:</strong> @item.Location</p>
+                        <p class="text-muted mb-2"><strong>Date:</strong> @item.ActivityDateTime.ToString("MMM dd, yyyy")</p>
+                        <a href="@Url.Action("Details", "Activites", new { id = item.ActiviteId })"
+                           class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>  

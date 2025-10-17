@@ -1,0 +1,55 @@
+﻿<style>
+    form {
+        margin: 100px auto; /* center form vertically */
+    }
+
+    label {
+        text-align: left; /* align label text to the left */
+        display: block; /* make each label take its own line */
+        font-weight: bold; /* optional: makes it easier to read */
+    }
+
+    .form-control {
+        width: 100%; /* make input box fill the small form width */
+        max-width: 250px; /* limit width so it's not too long */
+    }
+
+    h1 {
+        text-align: center; /* keep title centered */
+        margin-bottom: 20px;
+    }
+
+    form.w-25 {
+        text-align: left; /* align text inside form to the left */
+    }
+</style>
+
+<h1>Login</h1>
+
+
+<form asp-action="Login" class="w-25">
+    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+    <div class="mb-3">
+        <label for="Username" class="form-label fw-semibold">Username</label>
+        <input type="text" id="Username" name="Username" class="form-control form-control-sm" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Password" class="form-label fw-semibold">Password</label>
+        <input type="password" id="Password" name="Password" class="form-control form-control-sm" />
+    </div>
+
+    <div class="mb-3">
+        <input type="submit" value="Login" class="btn btn-primary" />
+    </div>
+
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="mb-3 alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+</form>
+
