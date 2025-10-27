@@ -7,6 +7,14 @@ namespace FunTickets.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IConfiguration _configuration;
+
+        // Constructor to inject IConfiguration
+        public AccountController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // GET: /Account/Login
         public IActionResult Login(string returnUrl)
         {
@@ -21,12 +29,9 @@ namespace FunTickets.Controllers
         public async Task<IActionResult> Login(string username, string password, string returnUrl)
         {
 
-            var strongusername = Environment.GetEnvironmentVariable("ADMIN_USERNAME");
-            var strongpassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+                if (username == _configuration["photos_username"] && password == _configuration["photos_password"])
+                {
 
-            // Validate username and password
-            if (username == strongusername && password == strongpassword)
-            {
                 // Create a list of claims identifying the user
                 var claims = new List<Claim>
                 {

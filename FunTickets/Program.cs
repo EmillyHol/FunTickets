@@ -7,7 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<FunTicketsContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FunTicketsContext")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("FunTicketsContext"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure()
+    ));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
