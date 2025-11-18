@@ -1,10 +1,11 @@
 ﻿
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using FunTickets.Data;
 using FunTickets.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FunTickets.Controllers
 {
@@ -12,10 +13,13 @@ namespace FunTickets.Controllers
     public class ActivitesController : Controller
     {
         private readonly FunTicketsContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public ActivitesController(FunTicketsContext context)
+        public ActivitesController(FunTicketsContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
+            
         }
 
         // GET: Activites
@@ -58,7 +62,7 @@ namespace FunTickets.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActiviteId,ActiviteName,Location,Description,CategoryId,EventDateTime,Owner,FormFile")] Activite activite)
+        public async Task<IActionResult> Create([Bind("ActiviteId,ActiviteName,Location,Description,CategoryId,ActivityDateTime,Owner,FormFile")] Activite activite)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +121,7 @@ namespace FunTickets.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ActiviteId,ActiviteName,Location,Description,CategoryId,EventDateTime,Owner")] Activite activite)
+        public async Task<IActionResult> Edit(int id, [Bind("ActiviteId,ActiviteName,Location,Description,CategoryId,ActivityDateTime,Owner,FormFile")] Activite activite)
         {
             if (id != activite.ActiviteId)
             {
@@ -126,23 +130,55 @@ namespace FunTickets.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+               try
                 {
                     // Get the existing entity (tracked by EF)
                     var existing = await _context.Activites.FindAsync(id);
                     if (existing == null)
                         return NotFound();
 
-                    // Update only editable fields
-                    existing.ActiviteName = activite.ActiviteName;
-                    existing.Location = activite.Location;
-                    existing.Description = activite.Description;
-                    existing.CategoryId = activite.CategoryId;
-                    existing.ActivityDateTime = activite.ActivityDateTime;
-                    existing.Owner = activite.Owner;
+                    string uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                     
+                    // Ensure the directory exists
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
 
-                    await _context.SaveChangesAsync();
-                }
+                    if (activite.FormFile != null && activite.FormFile.Length > 0)
+                    {
+                        // Generate a unique filename (keep original extension)
+                        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(activite.FormFile.FileName);
+
+                        // Define full path where file will be saved
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Save the file to the folder
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await activite.FormFile.CopyToAsync(stream);
+                        }
+
+                        // Delete the old image if one exists
+                        if (!string.IsNullOrEmpty(existing.ImageFilename))
+                        {
+                            string oldFilePath = Path.Combine(uploadsFolder, existing.ImageFilename);
+                            if (System.IO.File.Exists(oldFilePath))
+                                System.IO.File.Delete(oldFilePath);
+                        }
+
+                        // Store the new filename in the database
+                        existing.ImageFilename = uniqueFileName;
+                    }
+                    // Update only editable fields
+                        existing.ActiviteName = activite.ActiviteName;
+                        existing.Location = activite.Location;
+                        existing.Description = activite.Description;
+                        existing.FormFile = activite.FormFile;
+                        existing.CategoryId = activite.CategoryId;
+                        existing.ActivityDateTime = activite.ActivityDateTime;
+                        existing.Owner = activite.Owner;
+
+                        await _context.SaveChangesAsync();
+                    }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ActiviteExists(activite.ActiviteId))
@@ -154,11 +190,14 @@ namespace FunTickets.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home");
             }
+          
+
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryName", activite.CategoryId);
-            return View(activite);
+            return RedirectToAction(nameof(Index), "Home");
         }
+       
 
         // GET: Activites/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -176,7 +215,7 @@ namespace FunTickets.Controllers
                 return NotFound();
             }
 
-            return View(activite);
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         // POST: Activites/Delete/5
@@ -191,7 +230,7 @@ namespace FunTickets.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         private bool ActiviteExists(int id)

@@ -62,7 +62,6 @@ namespace FunTickets.Controllers
         }
 
         // GET: /Account/Logout
-        [HttpPost]
         public IActionResult Logout()
         {
             return View();

@@ -6,24 +6,26 @@ namespace FunTickets.Models
 {
     public class Activite
     {
-
+        [Display(Name = "Activity ID")]
         public int ActiviteId { get; set; }
+        [Display(Name = "Event")]
         public string ActiviteName { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
 
 
         public string Description { get; set; } = string.Empty;
 
-     
+        [Display(Name = "Category ID")]
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
-
+        [Display(Name ="Date & Time")]
         public DateTime ActivityDateTime { get; set; }
 
 
         public string Owner { get; set; } = string.Empty;
 
+        [Display(Name = "Created")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public string? ImageFilename { get; set; }

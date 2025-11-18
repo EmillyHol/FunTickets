@@ -12,7 +12,7 @@ namespace FunTickets.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false)
@@ -21,11 +21,11 @@ namespace FunTickets.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.CategoryId);
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Event",
+                name: "Activites",
                 columns: table => new
                 {
                     ActiviteId = table.Column<int>(type: "int", nullable: false)
@@ -36,22 +36,23 @@ namespace FunTickets.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ActivityDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Owner = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ImageFilename = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Event", x => x.ActiviteId);
+                    table.PrimaryKey("PK_Activites", x => x.ActiviteId);
                     table.ForeignKey(
-                        name: "FK_Event_Category_CategoryId",
+                        name: "FK_Activites_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Event_CategoryId",
-                table: "Event",
+                name: "IX_Activites_CategoryId",
+                table: "Activites",
                 column: "CategoryId");
         }
 
@@ -59,10 +60,10 @@ namespace FunTickets.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Event");
+                name: "Activites");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FunTickets.Migrations
 {
     [DbContext(typeof(FunTicketsContext))]
-    [Migration("20251009151825_CreateActiviteTable")]
-    partial class CreateActiviteTable
+    [Migration("20251029131612_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
