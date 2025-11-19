@@ -4,6 +4,7 @@ using FunTickets.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,11 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FunTickets.Migrations
 {
     [DbContext(typeof(FunTicketsContext))]
-    partial class FunTicketsContextModelSnapshot : ModelSnapshot
+    [Migration("20255558232635_OtherPurchase")]
+    partial class OtherPurchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
-#pragma warning disable 612, 618
+#pragma warning disable 652, 658
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 528);
@@ -62,7 +65,7 @@ namespace FunTickets.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Activites", (string)null);
+                    b.ToTable("Activites");
                 });
 
             modelBuilder.Entity("FunTickets.Models.Category", b =>
@@ -79,7 +82,7 @@ namespace FunTickets.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FunTickets.Models.Purchase", b =>
@@ -113,7 +116,7 @@ namespace FunTickets.Migrations
                     b.HasIndex("ActiviteId")
                         .IsUnique();
 
-                    b.ToTable("Purchase", (string)null);
+                    b.ToTable("Purchase");
                 });
 
             modelBuilder.Entity("FunTickets.Models.Activite", b =>
@@ -147,7 +150,7 @@ namespace FunTickets.Migrations
                 {
                     b.Navigation("Activites");
                 });
-#pragma warning restore 612, 618
+#pragma warning restore 652, 658
         }
     }
 }

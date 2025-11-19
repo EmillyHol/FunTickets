@@ -19,6 +19,8 @@ namespace FunTickets.Models
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
+        public List<Purchase>? Purchase { get; set; }
+
         [Display(Name ="Date & Time")]
         public DateTime ActivityDateTime { get; set; }
 
