@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
  });
 
 
- // GET: /api/photos/1
+ // GET: /api/actvity/1
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -49,4 +49,27 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+ // GET: /api/activity/1/purchases
+router.get('/:id/purchases', async (req, res) => {
+    const id = req.params.id;
+
+    if(isNaN(id)) {
+        res.status(400).send('Invalid event ID.');
+        return;
+    }
+
+    // make sure that any items are correctly URL encoded in the connection string
+    await sql.connect(dbConnectionString);
+    
+    const result = await sql.query`SELECT * from [dbo].[Purchase]
+                Where ActiviteId = ${id}`;
+    
+    // return the results as json
+    if(result.recordset.length === 0) {
+        res.status(404).json({ message: 'Event not found.'});        
+    }
+    else {
+        res.json(result.recordset); 
+    }
+});
  export default router;
