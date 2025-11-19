@@ -40,6 +40,7 @@ namespace FunTickets.Controllers
             }
 
             var activite = await _context.Activites
+                .Include(a => a.Purchase)
                 .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.ActiviteId == id);
             if (activite == null)
@@ -48,6 +49,28 @@ namespace FunTickets.Controllers
             }
 
             return View(activite);
+        }
+
+
+        public async Task<IActionResult> PurchaseSell(int? id)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Include Activite so you can display event name
+            var purchases = await _context.Activites
+                .Include(p => p.Purchase)
+                .FirstOrDefaultAsync(m => m.ActiviteId == id);
+
+            if (purchases == null) {
+                return NotFound();
+            }
+
+
+            return View(purchases);
         }
 
         // GET: Activites/Create
