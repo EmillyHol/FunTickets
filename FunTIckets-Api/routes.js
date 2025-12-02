@@ -1,5 +1,5 @@
 import express from 'express';
-import sql from 'mssql';
+import sql from "mssql";
 import 'dotenv/config';
 
 const router = express.Router();
@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
     
    res.json(result.recordsets[0]);
  });
+
 
 
  // GET: /api/actvity/1
@@ -72,4 +73,37 @@ router.get('/:id/purchases', async (req, res) => {
         res.json(result.recordset); 
     }
 });
+
+
+router.post('/', async (req,res) => {
+    const event = req.body.activiteid;
+    const tQuantity = req.body.tquantity;
+    const customerE = req.body.email;
+    const cardEx = req.body.ccx;
+    const cardcvc = req.body.cvc;
+    //validation step 2
+
+     // connect to DB
+     await sql.connect(dbConnectionString);
+    //run query- insert to the database
+    const result = await sql.query`INSERT INTO [dbo].[Purchase] (ActiviteId, TicketQuantity, CustomerEmail, CardExpiry, CardCVC)
+                VALUES (${event},${tQuantity}, ${customerE}, ${cardEx}, ${cardcvc})`;
+
+
+                //res.send(all good)
+      res.send({
+            status: "success",
+            message: "Purchase saved!",
+            result: result
+        });
+
+    if(result.recordset.length === 0) {
+        res.status(404).json({ message: 'Event not found.'});        
+    }
+    else {
+        res.json(result.recordset); 
+    }
+    
+});
+
  export default router;

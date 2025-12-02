@@ -16,6 +16,11 @@ app.get('/', (req, res) => {
   res.send('Hello Express!');
 });
 
+app.get('/form', async (req, res) => {
+  
+   res.redirect("form.html")
+ });
+
 //Start Server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

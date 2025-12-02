@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase</title>
+</head>
+<body>
+    <h1>Create</h1>
+
+<h4>Purchase</h4>
+<hr />
+<div class="container ms-5 mt-4">
+<div class="row">
+    <div class="col-md-4 text-start">
+        <form action="http://localhost:3000/api/Activites" method="post">
+            <div lass="text-danger"></div>
+            <div class="form-group mb-2">
+                <label for="ActiviteId" class="control-label">Eventid</label>
+                <input for="ActiviteId" name="activiteid" class="form-control" />
+            </div>
+            
+            <div class="form-group mb-2">
+                <label for="TicketQuantity" class="control-label">ticket amnt</label>
+                <input for="TicketQuantity" name="tquantity" class="form-control" />
+            </div>
+     
+            <div class="form-group mb-2">
+                <label for="CustomerEmail " class="control-label">email</label>
+                <input for="CustomerEmail " class="form-control" name="email" />
+            </div>
+
+            <div class="form-group mb-2">
+                <label for="CardExpiry" class="control-label">exp</label>
+                <input for="CardExpiry" name=ccx class="form-control" />
+            </div>
+
+            <div class="form-group mb-2">
+                <label for="CardCVC" class="control-label">cvc</label>
+                <input for="CardCVC" name="cvc" class="form-control" />
+            </div>
+
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
+</div>
+
+
+</body>
+</html>

@@ -198,6 +198,7 @@ namespace FunTickets.Controllers
                         existing.FormFile = activite.FormFile;
                         existing.CategoryId = activite.CategoryId;
                         existing.ActivityDateTime = activite.ActivityDateTime;
+                        existing.Purchase = activite.Purchase;
                         existing.Owner = activite.Owner;
 
                         await _context.SaveChangesAsync();
