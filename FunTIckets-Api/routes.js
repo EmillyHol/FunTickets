@@ -1,12 +1,14 @@
 import express from 'express';
+import valid from 'card-validator';
 import sql from "mssql";
 import 'dotenv/config';
+
 
 const router = express.Router();
 
 // get connection string from environment variable
 const dbConnectionString = process.env.dbConnectionString;
-// GET: /api/photos
+// GET: /api/Activites
 router.get('/', async (req, res) => {
   
     // make sure that any items are correctly URL encoded in the connection string
@@ -81,8 +83,21 @@ router.post('/', async (req,res) => {
     const customerE = req.body.email;
     const cardEx = req.body.ccx;
     const cardcvc = req.body.cvc;
-    //validation step 2
 
+    //validation
+    
+        const expiryValidation = valid.expirationDate(cardEx);
+        const cvcValidation = valid.cvv(cardcvc);
+
+         if (!expiryValidation.isValid) {
+            return res.status(400).json({error: "Ivalid date"})
+        }
+
+         if (!cvcValidation.isValid) {
+            return res.status(400).json({error: "Ivalid CVC"})
+        }
+
+    
      // connect to DB
      await sql.connect(dbConnectionString);
     //run query- insert to the database
@@ -105,5 +120,6 @@ router.post('/', async (req,res) => {
     }
     
 });
+
 
  export default router;
