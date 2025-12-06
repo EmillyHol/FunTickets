@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 
 
 
- // GET: /api/actvity/1
+ // GET: /api/Activites/1
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -52,7 +52,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
- // GET: /api/activity/1/purchases
+ // GET: /api/Activites/1/purchases
 router.get('/:id/purchases', async (req, res) => {
     const id = req.params.id;
 
@@ -111,13 +111,6 @@ router.post('/', async (req,res) => {
             message: "Purchase saved!",
             result: result
         });
-
-    if(result.recordset.length === 0) {
-        res.status(404).json({ message: 'Event not found.'});        
-    }
-    else {
-        res.json(result.recordset); 
-    }
     
 });
 
