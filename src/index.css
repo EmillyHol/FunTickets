@@ -1,0 +1,34 @@
+.mansonry-grid {
+  background: #ccc;
+  column-count: 3 ;
+  column-gap: 1,5;
+}
+
+.mansonry-grid-item {
+  display: inline-block;
+  margin: 0 0 zem;
+  width: 100%;
+}
+
+
+.mansonry-grid-item img:hover {
+  filter: brightness(0,65);
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .mansonry-grid{
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .mansonry-grid{
+    column-count: 1;
+  }
+}
+
+.thumbnall {
+  width: 100px;
+  height: auto;
+}
