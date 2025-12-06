@@ -1,29 +1,57 @@
-.mansonry-grid {
+.photo-grid {
   background: #ccc;
   column-count: 3 ;
   column-gap: 1,5;
 }
 
-.mansonry-grid-item {
-  display: inline-block;
-  margin: 0 0 zem;
+.photo-grid-item {
+  margin-bottom: 1rem;
+  padding: 0;
+  display: block;
+  break-inside: avoid; /*keep the whole card in one column*/
+  border-radius: 2px;
+}
+
+.photo-grid-item img{
   width: 100%;
+  display: block;
+  border-radius: 2px;
 }
 
 
-.mansonry-grid-item img:hover {
+.photo-grid-item img:hover {
   filter: brightness(0,65);
-  cursor: pointer;
+ 
 }
+
+.photo-grid-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.photo-grid-item .label {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  color: white;
+  font-size: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  display: none;
+}
+
+.photo-grid-item a:hover .label{
+  display: block;
+}
+
 
 @media (max-width: 992px) {
-  .mansonry-grid{
+  .photo-grid{
     column-count: 2;
   }
 }
 
 @media (max-width: 768px) {
-  .mansonry-grid{
+  .photo-grid{
     column-count: 1;
   }
 }
